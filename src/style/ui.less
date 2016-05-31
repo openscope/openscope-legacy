@@ -1,0 +1,27 @@
+
+.spinner(@spinner-size: 24px, @speed: 0.5s) {
+  transition: opacity 0.5s ease;
+  
+  width: @spinner-size;
+  height: @spinner-size;
+
+  margin: 0 auto;
+
+  background-image: url('images/loading-spinner-grid.png');
+  background-size: 100%;
+
+  &:after {
+    content: '';
+    display: block;
+    
+    width: @spinner-size;
+    height: @spinner-size;
+
+    background-image: url('images/loading-spinner.png');
+    background-size: 100%;
+
+    animation: spin @speed linear infinite;
+  }
+  
+}
+

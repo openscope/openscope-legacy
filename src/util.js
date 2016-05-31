@@ -1,4 +1,20 @@
 
+function time() {
+  return Date.now() * 0.001;
+}
+
+// # lerp
+//
+// Interpolates `i` from range `il..ih` to `ol..oh`.
+//
+// ```js
+// lerp(0, 50, 100, -50, 50); // returns 0
+// ```
+
+function lerp(il, i, ih, ol, oh) {
+  return ((i - il) / (ih - il)) * (oh - ol) + ol;
+}
+
 // # getValue
 // Gets a value from an object with the option to have a default
 // value. If no default value or key is present, `null` is returned.
@@ -33,5 +49,7 @@ function withScope(scope, func) {
   };
 }
 
+exports.time = time;
+exports.lerp = lerp;
 exports.getValue = getValue;
 exports.withScope = withScope;

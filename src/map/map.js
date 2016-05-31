@@ -35,6 +35,8 @@ class Map extends events.Events {
     
     this.map = new mapboxgl.Map({
       container: this.element.get(0),
+      center: [-122.3790, 37.6213],
+      zoom: 12,
       style: 'mapbox://styles/zlsa/cio4ufiti005qaengdlqomsz5'
     });
 

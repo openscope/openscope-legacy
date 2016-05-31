@@ -1,6 +1,7 @@
 
 @import 'helpers';
 @import 'values';
+@import 'ui';
 
 @loading-bg: hsl(@theme-hue, @theme-saturation, 4%);
 @loading-fg: hsl(@theme-hue, @theme-saturation, 60%);
@@ -40,33 +41,9 @@
   }
 
   .spinner {
-    transition: opacity 0.5s ease;
-    
-    @spinner-size: 64px;
-
-    width: @spinner-size;
-    height: @spinner-size;
-
-    margin: 0 auto;
-
-    background-image: url('images/loading-spinner-grid.png');
-      background-size: 100%;
-
-    &:after {
-      content: '';
-      display: block;
-      
-      width: @spinner-size;
-      height: @spinner-size;
-
-      background-image: url('images/loading-spinner.png');
-      background-size: 100%;
-
-      animation: spin 2s linear infinite;
-    }
-    
+    .spinner(64px, 2s);
   }
-  
+
   .name {
     display: none;
     
