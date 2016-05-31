@@ -1,0 +1,18 @@
+{
+  "files": [
+    "webpack.config.js",
+    "src/**/*.js"
+  ],
+  "ignore": [
+    "**/*.min.js",
+    "node_modules/**/*.js"
+  ],
+  "readme": "README.md",
+  "name": "OpenScope",
+  "output": "build/docs",
+  "version": "package.json",
+  "links": {
+    "github": "https://github.com/openscope/source/"
+  },
+  "owners": "ZLSA Design"
+}

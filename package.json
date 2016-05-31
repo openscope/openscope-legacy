@@ -1,0 +1,32 @@
+{
+  "name": "airspace",
+  "author": "Jon Ross <jonross.zlsa@gmail.com> (https://zlsa.github.io/)",
+  "description": "Air Traffic Control Simulator",
+  "keywords": [
+    "atc",
+    "sector",
+    "airplane",
+    "aircraft"
+  ],
+  "homepage": "https://airspace-game.github.io/",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": "github:airspace-game/game",
+  "dependencies": {
+    "jquery": "^2.2.3",
+    "mapbox-gl": "^0.18.0",
+    "url-loader": "^0.5.7"
+  },
+  "devDependencies": {
+    "babel-core": "^6.8.0",
+    "babel-loader": "^6.2.4",
+    "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
+    "json-loader": "^0.5.4",
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "style-loader": "^0.13.1",
+    "transform-loader": "^0.2.3",
+    "webworkify-webpack": "^1.0.6"
+  }
+}
