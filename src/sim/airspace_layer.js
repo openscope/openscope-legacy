@@ -50,7 +50,8 @@ class AirspaceLayer extends events.Events {
       'varying vec2 vPosition;',
       'void main() {',
       '  vPosition = aPosition;',
-      '  gl_Position = vec4(uPosition * uResolutionInverse + aPosition * uResolutionInverse * uRadius * 2.0, 0.5, 1.0);',
+      '  vec2 position = vec2(uPosition.x * 2.0 * uResolutionInverse.x - 1.0, 1.0 - (uPosition.y * 2.0 * uResolutionInverse.y));',
+      '  gl_Position = vec4(position + aPosition * uResolutionInverse * uRadius * 2.0, 0.5, 1.0);',
       '}'
     ].join('\n'), [
       'precision mediump float;',
@@ -58,7 +59,7 @@ class AirspaceLayer extends events.Events {
       'uniform float uRadius;',
       'varying vec2 vPosition;',
       'void main() {',
-      '  float blur = (1.0 / uRadius) * 0.5;',
+      '  float blur = (1.0 / uRadius) * 1.0;',
       '  float alpha = 1.0 - smoothstep(1.0 - blur, 1.0, length(vPosition));',
       '  gl_FragColor = vec4(uColor * alpha, alpha);',
       '}'
@@ -84,6 +85,32 @@ class AirspaceLayer extends events.Events {
     });
     
   }
+
+  drawCircle(lnglat, options) {
+    if(!options) options = {};
+    
+    var pos = this.map.map.project(lnglat);
+
+    var uniforms = {
+      uTime: util.time() * 0.001,
+      uResolutionInverse: [
+        1 / this.gl.canvas.width,
+        1 / this.gl.canvas.height
+      ],
+      uPosition: [pos.x, pos.y],
+      uRadius: util.getValue(options, 'radius', 4),
+      uColor: util.getValue(options, 'color', [
+        112 / 255,
+        180 / 255,
+        194 / 255
+      ])
+    };
+
+    this.gl.useProgram(this.shaders['circle'].program);
+    twgl.setBuffersAndAttributes(this.gl, this.shaders['circle'], this.buffers['square']);
+    twgl.setUniforms(this.shaders['circle'], uniforms);
+    twgl.drawBufferInfo(this.gl, this.gl.TRIANGLES, this.buffers['square']);
+  }
   
   render() {
     var gl = this.gl;
@@ -91,29 +118,7 @@ class AirspaceLayer extends events.Events {
     twgl.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     
-    var pos = this.map.map.project([-122.3790, 37.6213]);
-
-    console.log(pos);
-
-    var uniforms = {
-      uTime: util.time() * 0.001,
-      uResolutionInverse: [
-        1 / gl.canvas.width,
-        1 / gl.canvas.height
-      ],
-      uPosition: [pos.x, pos.y],
-      uRadius: 3,
-      uColor: [
-        112 / 255,
-        180 / 255,
-        194 / 255
-      ]
-    };
-
-    gl.useProgram(this.shaders['circle'].program);
-    twgl.setBuffersAndAttributes(gl, this.shaders['circle'], this.buffers['square']);
-    twgl.setUniforms(this.shaders['circle'], uniforms);
-    twgl.drawBufferInfo(gl, gl.TRIANGLES, this.buffers['square']);
+    this.drawCircle([-122.366978, 37.627525]);
   }
 
 }
