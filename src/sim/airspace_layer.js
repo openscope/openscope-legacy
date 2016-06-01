@@ -12,17 +12,18 @@ require('./style/airspace-layer.less');
 
 class AirspaceLayer extends events.Events {
 
-  constructor(map) {
+  constructor(map, airspace) {
     super();
 
     this.map = map;
+    this.airspace = airspace;
 
     this.element = $('<canvas></canvas>');
     this.element.addClass('airspace-layer');
 
     this.gl = twgl.getWebGLContext(this.element.get(0), {
-      alpha: true,
-      premultipliedAlpha: false
+      //alpha: true,
+      //premultipliedAlpha: false
     });
 
     this.initShaders();
@@ -251,7 +252,12 @@ class AirspaceLayer extends events.Events {
     twgl.resizeCanvasToDisplaySize(gl.canvas);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
-    this.drawDot([-122.366978, 37.627525], 1000);
+    var aircraft = this.airspace.getVisibleAircraft();
+    
+    for(var i=0; i<aircraft.length; i++) {
+      this.drawDot(aircraft[i].position, aircraft[i].altitude);
+    }
+    
   }
 
 }

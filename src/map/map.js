@@ -82,7 +82,7 @@ class Map extends events.Events {
   }
   
   initAirspaceLayer() {
-    this.airspace_layer = new airspace_layer.AirspaceLayer(this);
+    this.airspace_layer = new airspace_layer.AirspaceLayer(this, this.app.airspace);
 
     this.element.append(this.airspace_layer.element);
     

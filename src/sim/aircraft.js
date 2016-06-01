@@ -20,6 +20,9 @@ class Aircraft extends events.Events {
 
     this.callsign = util.getValue(options, 'callsign', new Error('expected aircraft callsign'));
     this.model = util.getValue(options, 'model', new Error('expected aircraft model'));
+
+    this.position = util.getValue(options, 'position', [-122, 37]);
+    this.altitude = util.getValue(options, 'altitude', 0);
   }
 
   setAirspace(options) {
