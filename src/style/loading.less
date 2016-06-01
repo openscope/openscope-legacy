@@ -3,9 +3,6 @@
 @import 'values';
 @import 'ui';
 
-@loading-bg: hsl(@theme-hue, @theme-saturation, 4%);
-@loading-fg: hsl(@theme-hue, @theme-saturation, 60%);
-
 @dot-size: 8px;
 @dot-spacing: 12px;
 
@@ -22,11 +19,11 @@
 #loading {
   .absolute-full-size;
   
-  background-color: @loading-bg;
+  background-color: @bg;
 
   transition: opacity 1s ease-out, background-color 1s ease;
 
-  color: @loading-fg;
+  color: @fg;
 
   z-index: 100;
 
@@ -34,6 +31,8 @@
   flex-direction: column;
   
   padding-top: 20vh;
+
+  z-index: 10000;
 
   > * {
     text-align: center;
@@ -44,17 +43,36 @@
     .spinner(64px, 2s);
   }
 
+  .error {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    position: absolute;
+
+    top: 20vh;
+    left: 50%;
+
+    margin-top: 0;
+    
+    width: 64px;
+    height: 64px;
+
+    transform: translateX(-50%);
+
+    background-image: url('images/loading-error.png');
+    background-size: 100%;
+  }
+
   .name {
     display: none;
     
-    background-color: @loading-fg;
+    background-color: @fg;
 
     padding: 1rem 0;
 
     font-size: 150%;
     font-weight: bold;
 
-    color: @loading-bg;
+    color: @bg;
 
   }
   
@@ -74,6 +92,10 @@ body.error #loading {
   
   color: hsl(10, 70%, 60%);
 
+  .error {
+    opacity: 1;
+  }
+  
   .spinner {
     opacity: 0;
   }
