@@ -3,6 +3,10 @@ function time() {
   return Date.now() * 0.001;
 }
 
+function radians(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
 // # lerp
 //
 // Interpolates `i` from range `il..ih` to `ol..oh`.
@@ -13,6 +17,22 @@ function time() {
 
 function lerp(il, i, ih, ol, oh) {
   return ((i - il) / (ih - il)) * (oh - ol) + ol;
+}
+
+function clamp(a, i, b) {
+  if(a > b) {
+    var temp = a;
+    a = b;
+    b = temp;
+  }
+  
+  if(a > i) return a;
+  if(b < i) return b;
+  return i;
+}
+
+function clerp(il, i, ih, ol, oh) {
+  return lerp(il, clamp(il, i, ih), ih, ol, oh);
 }
 
 // # getValue
@@ -50,6 +70,8 @@ function withScope(scope, func) {
 }
 
 exports.time = time;
+exports.radians = radians;
 exports.lerp = lerp;
+exports.clerp = clerp;
 exports.getValue = getValue;
 exports.withScope = withScope;

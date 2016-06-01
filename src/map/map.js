@@ -57,6 +57,8 @@ class Map extends events.Events {
 
     this.app.setLoadingMessage('Downloading map data');
 
+    this.map.transform.altitude = 2;
+
     // Set up map load handler.
     
     this.map.on('load', util.withScope(this, function() {
@@ -78,7 +80,7 @@ class Map extends events.Events {
     this.initAirspaceLayer();
 
   }
-
+  
   initAirspaceLayer() {
     this.airspace_layer = new airspace_layer.AirspaceLayer(this);
 
