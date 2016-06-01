@@ -1,5 +1,6 @@
 
 @import '../../style/values.less';
+@import '../../style/helpers.less';
 
 #map-container {
   width: 100%;
@@ -8,6 +9,10 @@
   #map {
     width: 100%;
     height: 100%;
+  }
+
+  .map-container {
+    .absolute-full-size;
   }
   
   #map-attribution {

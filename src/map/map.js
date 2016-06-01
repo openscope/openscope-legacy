@@ -35,11 +35,16 @@ class Map extends events.Events {
     this.element = $('<div></div>');
     this.element.attr('id', 'map');
 
+    this.container = $('<div></div>');
+    this.container.addClass('map-container');
+    
+    this.element.append(this.container);
+
     // Create the map object.
 
     try {
       this.map = new mapboxgl.Map({
-        container: this.element.get(0),
+        container: this.container.get(0),
         center: [-122.3790, 37.6213],
         zoom: 12,
         attributionControl: false,
@@ -76,8 +81,10 @@ class Map extends events.Events {
 
   initAirspaceLayer() {
     this.airspace_layer = new airspace_layer.AirspaceLayer(this);
+
+    this.element.append(this.airspace_layer.element);
     
-    this.map.on('render', util.withScope(this, this.airspace_layer.render));
+    this.map.on('render', util.withScope(this.airspace_layer, this.airspace_layer.render));
   }
 
 }
