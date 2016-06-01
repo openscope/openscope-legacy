@@ -231,8 +231,6 @@ class AirspaceLayer extends events.Events {
       var fadeEnd   = util.getValue(options, 'fadeEnd', 5);
 
       options.alpha = util.clerp(fadeStart, this.map.map.getZoom(), fadeEnd, 1, 0);
-
-      console.log(options.alpha);
     }
 
     options.radius = util.lerp(3, this.map.map.getZoom(), 15, 0, 6);
