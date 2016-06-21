@@ -143,8 +143,6 @@ class AirspaceLayer extends events.Events {
       ])
     };
 
-    this.gl.useProgram(this.shaders['circle'].program);
-    twgl.setBuffersAndAttributes(this.gl, this.shaders['circle'], this.buffers['square']);
     twgl.setUniforms(this.shaders['circle'], uniforms);
     twgl.drawBufferInfo(this.gl, this.gl.TRIANGLES, this.buffers['square']);
   }
@@ -181,10 +179,18 @@ class AirspaceLayer extends events.Events {
       ])
     };
 
-    this.gl.useProgram(this.shaders['line'].program);
-    twgl.setBuffersAndAttributes(this.gl, this.shaders['line'], this.buffers['square']);
     twgl.setUniforms(this.shaders['line'], uniforms);
     twgl.drawBufferInfo(this.gl, this.gl.TRIANGLES, this.buffers['square']);
+  }
+
+  startCircles() {
+    this.gl.useProgram(this.shaders['circle'].program);
+    twgl.setBuffersAndAttributes(this.gl, this.shaders['circle'], this.buffers['square']);
+  }
+  
+  startLines() {
+    this.gl.useProgram(this.shaders['line'].program);
+    twgl.setBuffersAndAttributes(this.gl, this.shaders['line'], this.buffers['square']);
   }
   
   drawCircleMap(lnglat, options) {
@@ -208,8 +214,8 @@ class AirspaceLayer extends events.Events {
     this.drawLine(start, end, options);
 
   }
-
-  drawDot(lnglat, altitude, options) {
+  
+  calculateDot(lnglat, altitude, options) {
     if(!options) options = {};
 
     // When `0`, pitch makes no difference to the altitude (it's
@@ -226,20 +232,33 @@ class AirspaceLayer extends events.Events {
     var start = [pos.x, pos.y - pixel_altitude];
     var end = [pos.x, pos.y];
 
-    if(!('alpha' in options)) {
-      var fadeStart = util.getValue(options, 'fadeStart', 6);
-      var fadeEnd   = util.getValue(options, 'fadeEnd', 5);
+    var circleOptions = {};
 
-      options.alpha = util.clerp(fadeStart, this.map.map.getZoom(), fadeEnd, 1, 0);
+    var fadeStart = util.getValue(options, 'fadeStart', 6);
+    var fadeEnd   = util.getValue(options, 'fadeEnd', 5);
 
-      console.log(options.alpha);
-    }
+    var alpha = util.clerp(fadeStart, this.map.map.getZoom(), fadeEnd, 1, 0);
+
+    return [start, end, alpha];
+
+  }
+
+  drawDotCircle(info, options) {
+    if(!options) options = {};
 
     options.radius = util.lerp(3, this.map.map.getZoom(), 15, 0, 6);
+    options.alpha = info[2];
     
-    this.drawCircle([pos.x, pos.y - pixel_altitude], options);
+    this.drawCircle([info[0][0], info[0][1]], options);
+  }
+  
+  drawDotLine(info, options) {
+    if(!options) options = {};
+
+    options.radius = util.lerp(3, this.map.map.getZoom(), 15, 0, 6);
+    options.alpha = info[2];
     
-    this.drawLine(start, end, options);
+    this.drawLine(info[0], info[1], options);
   }
   
   render() {
@@ -254,8 +273,20 @@ class AirspaceLayer extends events.Events {
 
     var aircraft = this.airspace.getVisibleAircraft();
     
+    var dotInfo = [];
+    
     for(var i=0; i<aircraft.length; i++) {
-      this.drawDot(aircraft[i].position, aircraft[i].altitude);
+      dotInfo.push(this.calculateDot(aircraft[i].position, aircraft[i].altitude));
+    }
+
+    this.startCircles();
+    for(var i=0; i<dotInfo.length; i++) {
+      this.drawDotCircle(dotInfo[i]);
+    }
+    
+    this.startLines();
+    for(var i=0; i<dotInfo.length; i++) {
+      this.drawDotLine(dotInfo[i]);
     }
     
   }
