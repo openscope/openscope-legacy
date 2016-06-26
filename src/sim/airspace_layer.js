@@ -3,6 +3,7 @@ var $ = require('jquery');
 
 var util = require('../util.js');
 var events = require('../events.js');
+var mapboxgl = require('mapbox-gl');
 
 var aircraft = require('./aircraft.js');
 
@@ -215,7 +216,7 @@ class AirspaceLayer extends events.Events {
 
   }
   
-  calculateDot(lnglat, altitude, options) {
+  calculateDotInfo(lnglat, altitude, options) {
     if(!options) options = {};
 
     // When `0`, pitch makes no difference to the altitude (it's
@@ -260,23 +261,15 @@ class AirspaceLayer extends events.Events {
     
     this.drawLine(info[0], info[1], options);
   }
-  
-  render() {
-    var gl = this.gl;
 
-    gl.enable(gl.BLEND);
-    gl.disable(gl.DEPTH_TEST);
-    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+  drawAircraft() {
 
-    twgl.resizeCanvasToDisplaySize(gl.canvas);
-    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-    var aircraft = this.airspace.getVisibleAircraft();
+    var aircraft = this.airspace.getVisibleAircraft(null);
     
     var dotInfo = [];
     
     for(var i=0; i<aircraft.length; i++) {
-      dotInfo.push(this.calculateDot(aircraft[i].position, aircraft[i].altitude));
+      dotInfo.push(this.calculateDotInfo(aircraft[i].position, aircraft[i].altitude));
     }
 
     this.startCircles();
@@ -289,6 +282,22 @@ class AirspaceLayer extends events.Events {
       this.drawDotLine(dotInfo[i]);
     }
     
+  }
+  
+  render() {
+    var gl = this.gl;
+
+    gl.enable(gl.BLEND);
+    gl.disable(gl.DEPTH_TEST);
+    gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
+    twgl.resizeCanvasToDisplaySize(gl.canvas);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+    gl.clearColor(0, 0, 0, 0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    this.drawAircraft();
   }
 
 }

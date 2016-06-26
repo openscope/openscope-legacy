@@ -57,7 +57,7 @@ class App extends events.Events {
     var now = util.time();
     this.elapsed = now - this.last;
 
-    this.airspace.tick();
+    this.airspace.tick(this.elapsed);
     
     this.last = now;
     requestAnimationFrame(util.withScope(this, this.tick));

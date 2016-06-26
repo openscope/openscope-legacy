@@ -30,12 +30,13 @@ class Airspace extends events.Events {
       return util.lerp(0, Math.random(), 1, -0.2, 0.2);
     }
     
-    for(var i=0; i<100; i++) {
+    for(var i=0; i<500; i++) {
       this.addAircraft(new aircraft.Aircraft({
         callsign: 'VX0001',
         model: 'foo',
         position: [-122.366978 + randrange(), 37.627525 + randrange()],
-        altitude: util.lerp(0, Math.random(), 1, 100, 10000)
+        altitude: util.lerp(0, Math.random(), 1, 100, 10000),
+        heading: util.lerp(0, Math.random(), 1, 0, Math.PI * 2)
       }));
     }
   }
@@ -46,12 +47,20 @@ class Airspace extends events.Events {
     this.aircraft.push(aircraft);
   }
 
-  getVisibleAircraft() {
-    return this.aircraft;
+  getVisibleAircraft(bounds) {
+    var aircraft = [];
+    
+    for(var i=0; i<this.aircraft.length; i++) {
+      if(this.aircraft[i].withinBounds(bounds)) aircraft.push(this.aircraft[i]);
+    }
+    
+    return aircraft;
   }
 
-  tick() {
-    
+  tick(elapsed) {
+    for(var i=0; i<this.aircraft.length; i++) {
+      this.aircraft[i].tick(elapsed);
+    }
   }
 
 }

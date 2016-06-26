@@ -86,7 +86,14 @@ class Map extends events.Events {
 
     this.element.append(this.airspace_layer.element);
     
-    this.map.on('render', util.withScope(this.airspace_layer, this.airspace_layer.render));
+    requestAnimationFrame(util.withScope(this, this.render));
+    
+  }
+
+  render() {
+    this.airspace_layer.render()
+    
+    requestAnimationFrame(util.withScope(this, this.render));
   }
 
 }

@@ -1,10 +1,18 @@
 
+function mod(n) {
+  return ((this%n)+n)%n;
+}
+
 function time() {
   return Date.now() * 0.001;
 }
 
 function radians(degrees) {
   return degrees * (Math.PI / 180);
+}
+
+function degrees(radians) {
+  return radians * (180 / Math.PI);
 }
 
 // # lerp
@@ -69,8 +77,10 @@ function withScope(scope, func) {
   };
 }
 
+exports.mod = mod;
 exports.time = time;
 exports.radians = radians;
+exports.degrees = degrees;
 exports.lerp = lerp;
 exports.clerp = clerp;
 exports.getValue = getValue;
