@@ -21,15 +21,13 @@ class Airspace extends events.Events {
 
     this.aircraft = [];
 
-    setInterval(util.withScope(this, this.initDemoAircraft), 200);
+    setInterval(util.withScope(this, this.initDemoAircraft), 2000);
   }
 
   initDemoAircraft() {
 
-    function randrange() {
-      return util.lerp(0, Math.random(), 1, -0.2, 0.2);
-    }
-    
+    if(this.aircraft.length > 1000) return;
+
     for(var i=0; i<1; i++) {
       this.addAircraft(new aircraft.Aircraft({
         callsign: 'VX0001',
